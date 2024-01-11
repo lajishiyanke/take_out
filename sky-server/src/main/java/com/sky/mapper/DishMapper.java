@@ -30,11 +30,15 @@ public interface DishMapper {
     * 菜品分页查询*/
     Page<DishVO> pageQuery(DishPageQueryDTO dishPageQueryDTO);
 
-    void deleteBatch(List<Long> ids);
 
     @Select("select * from sky_take_out.dish where id=#{id}")
     Dish getById(Long id);
 
     @Delete("delete from sky_take_out.dish where id=#{id}")
     void deleteById(Long id);
+
+    void deleteByIds(List<Long> ids);
+
+    @AutoFill(value = OperationType.UPDATE)
+    void update(Dish dish);
 }
