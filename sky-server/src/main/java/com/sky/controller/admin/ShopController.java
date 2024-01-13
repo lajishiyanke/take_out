@@ -20,6 +20,7 @@ public class ShopController {
     public Result setStatus(@PathVariable Integer status){
         log.info("店铺状态");
         redisTemplate.opsForValue().set("SHOP",status);
+
         return Result.success();
     }
     @GetMapping("/status")
