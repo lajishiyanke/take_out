@@ -11,3 +11,10 @@ sky:
     access-key-id: LTAI5tMwyzncSq2dPupZqGfz
     access-key-secret: SHxlb2iKEOIwKsLvgYZhCA0rsFkRn5
     bucket-name: waizuilongwang
+  redis:
+    host: localhost
+    port: 6379
+    database: 1
+  wechat:
+    appid: wx8d5e5dd65874ba6d
+    secret: d0ccac2ea9466a44bb6b9e4aa5e1400d

@@ -18,7 +18,7 @@ public interface CategoryMapper {
      * @param category
      */
     @AutoFill(value = OperationType.INSERT)
-    @Insert("insert into category(type, name, sort, status, create_time, update_time, create_user, update_user)" +
+    @Insert("insert into sky_take_out.category(type, name, sort, status, create_time, update_time, create_user, update_user)" +
             " VALUES" +
             " (#{type}, #{name}, #{sort}, #{status}, #{createTime}, #{updateTime}, #{createUser}, #{updateUser})")
     void insert(Category category);
@@ -34,7 +34,7 @@ public interface CategoryMapper {
      * 根据id删除分类
      * @param id
      */
-    @Delete("delete from category where id = #{id}")
+    @Delete("delete from sky_take_out.category where id = #{id}")
     void deleteById(Long id);
 
     /**
