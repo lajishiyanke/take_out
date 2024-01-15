@@ -341,7 +341,7 @@ public class OrderServiceImpl implements OrderService {
 
         orderMapper.update(orders);
 
-        //webSocket向客户端浏览器推送消息 type orderId content
+        //webSocket向客户端浏览器推 送消息 type orderId content
         Map map=new HashMap<>();
         map.put("type",1);//1.来单提醒 2 客户催单
         map.put("orderId",ordersDB.getId());
@@ -372,6 +372,24 @@ public class OrderServiceImpl implements OrderService {
         vo.setPackageStr(jsonObject.getString("package"));
 
         return vo;
+    }
+
+    @Override
+    public void reminder(Long id) {
+        // 根据id查询订单
+        Orders ordersDB = orderMapper.getByid(id);
+
+        // 校验订单是否存在
+        if (ordersDB == null ) {
+            throw new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+        //通过webSocket 催单
+        Map map=new HashMap<>();
+        map.put("type",2);//1.来单提醒 2 客户催单
+        map.put("orderId",ordersDB.getId());
+        map.put("content",ordersDB.getNumber());
+        String json = JSON.toJSONString(map);
+        webSocketServer.sendToAllClient(json);
     }
 
     private List<OrderVO> getOrderVOList(Page<Orders> page) {

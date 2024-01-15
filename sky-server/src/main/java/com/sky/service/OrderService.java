@@ -35,4 +35,6 @@ public interface OrderService {
     void paySuccess(String outTradeNo);
 
     OrderPaymentVO payment(OrdersPaymentDTO ordersPaymentDTO) throws Exception;
+
+    void reminder(Long id);
 }
