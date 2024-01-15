@@ -26,4 +26,10 @@ public interface OrderMapper {
 
     @Select("select * from sky_take_out.orders where status= #{pendingPayment} and order_time < #{minutes}")
     List<Orders> getByStatusAndOrderTime(Integer pendingPayment, LocalDateTime minutes);
+
+    /**
+     * 根据订单号查询订单
+     */
+    @Select("select * from sky_take_out.orders where number = #{orderNumber}")
+    Orders getByNumber(String outTradeNo);
 }
