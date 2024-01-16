@@ -2,8 +2,10 @@ package com.sky.service.impl;
 
 import com.sky.entity.Orders;
 import com.sky.mapper.OrderMapper;
+import com.sky.mapper.UserMapper;
 import com.sky.service.ReportService;
 import com.sky.vo.TurnoverReportVO;
+import com.sky.vo.UserReportVO;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,12 +26,15 @@ public class ReportServiceImpl implements ReportService {
     @Autowired
     private OrderMapper orderMapper;
 
+    @Autowired
+    private UserMapper userMapper;
     /*
     * 统计营业额数据
     * */
     public TurnoverReportVO getTurnoverStatistics(LocalDate begin, LocalDate end) {
         //计算dateList
         List<LocalDate> dateList=new ArrayList<>();
+        dateList.add(begin);
         while(!begin.equals(end)){
             begin=begin.plusDays(1);
             dateList.add(begin);
@@ -56,5 +61,39 @@ public class ReportServiceImpl implements ReportService {
                     .dateList(StringUtils.join(dateList,","))
                     .turnoverList(StringUtils.join(turnoverList,","))
                     .build();
+    }
+
+    @Override
+    public UserReportVO getUserStatistics(LocalDate begin, LocalDate end) {
+        //计算dateList
+        List<LocalDate> dateList=new ArrayList<>();
+        dateList.add(begin);
+        while(!begin.equals(end)){
+            begin=begin.plusDays(1);
+            dateList.add(begin);
+        }
+        //靠卡住crete_time即可
+        //每天新增 0<crete_time<23:59
+        List<Integer> newUserList=new ArrayList<>();
+        //每天总计 create_time<23:59
+        List<Integer> totalUserList=new ArrayList<>();
+        for (LocalDate date:dateList){
+            LocalDateTime beginTime = LocalDateTime.of(date, LocalTime.MIN);
+            LocalDateTime endTime = LocalDateTime.of(date,LocalTime.MAX);
+            //先查总数
+            Map map =new HashMap<>();
+            map.put("end",endTime);
+            Integer total_user=userMapper.conutByMap(map);
+            totalUserList.add(total_user);
+            //新增
+            map.put("begin",beginTime);
+            Integer new_user=userMapper.conutByMap(map);
+            newUserList.add(new_user);
+        }
+        return UserReportVO.builder()
+                .dateList(StringUtils.join(dateList,","))
+                .totalUserList(StringUtils.join(totalUserList,","))
+                .newUserList(StringUtils.join(newUserList,","))
+                .build();
     }
 }
