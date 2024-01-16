@@ -35,4 +35,6 @@ public interface OrderMapper {
     Orders getByNumber(String outTradeNo);
 
     Double sumByMap(Map map);
+
+    Integer conutByMap(Map map);
 }
